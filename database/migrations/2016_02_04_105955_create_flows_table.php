@@ -18,8 +18,8 @@ class CreateFlowsTable extends Migration
             $table->unsignedTinyInteger('flow_type')->comment('0固定,1自由');
             $table->string('flow_name',50)->comment('流程名称');
             $table->string('flow_desc',255)->comment('流程描述');
-            $table->unsignedBigInteger('sort_order')->comment('排序');
-            $table->boolean('status')->comment('0不可用1正常');
+            $table->unsignedBigInteger('sort_order')->comment('排序')->default(0);
+            $table->boolean('status')->comment('0不可用1正常')->default(1);
             $table->timestamps();
         });
     }

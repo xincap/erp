@@ -54,6 +54,7 @@ function createElement(type, name)
                 <option value="int">整数</option>
                 <option value="float">小数</option>
                 <option value="idcard">身份证号码</option>
+                <option value="text">手机号码</option>
             </select>   
         </td>
         <td>
@@ -163,7 +164,7 @@ dialog.onok = function (){
             try {
                 editor.execCommand('error');
             } catch ( e ) {
-                alert('控件异常，请到 [雷劈网] 反馈或寻求帮助！');
+                alert('控件异常！');
             }
             return false;
         }

@@ -52,11 +52,8 @@ var leipiFormDesign = {
                 data: {"form_id": {{ $obj['id'] or '0' }}, "design_content": formeditor},
                 success: function (data) {
                     $("#button_save").text("确定保存");
-                    if (data.status == 1) {
-                        alert('保存成功');
-                        location.reload();
-                    } else {
-                        alert(data.info);
+                    if (data.ret) {
+                        window.location.href = '/admin/form/design?id='+data.ret;
                     }
                 }
             });

@@ -13,7 +13,6 @@ use Schema;
 class FormController extends AdminController
 {
     public function getDesign(){
-        
         $id = Request::get('id',null);
         $obj    = Form::findOrNew($id);
         return view('admin.form.design',['obj'=>$obj]);
@@ -22,26 +21,21 @@ class FormController extends AdminController
     public function postDesign(){
         
         $id = Request::get('form_id',null);
-        
-        try {
-            $obj   = Form::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exc) {
-            return response('not found');
-        }
-        
+       
         $form       = new FormDesign();
         $content    = Request::get('design_content');
         $resp       = $form->parse_form($content);
-        $sql        = $form->parse_table($obj->id, $resp['add_fields']);
-        dd($resp['fields']);
         $data = array(
             'fields'=>$resp['fields'],
             'content'=>$resp['template'],
             'content_parse'=>$resp['parse'],
             'content_data'=>  json_encode($resp['data'],JSON_UNESCAPED_UNICODE),
         );
-        $ret    = $obj->update($data,['id'=>$id]);
-        return redirect('/admin/form/design?id='.$id);
+        
+        $obj    = Form::updateOrCreate(['id'=>$id], $data,['id'=>$id]);
+        $form->parse_table(sprintf("%06d",$obj->id), $resp['add_fields']);
+
+        return response()->json(['ret'=>$obj->id]);
     }
     
     public function getPreview(){
