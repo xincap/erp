@@ -163,7 +163,7 @@ class FormDesign {
                     $template = self::str_replace_once($plugin, $attr_arr_all['content'], $template);
                     $template_parse = self::str_replace_once($plugin, '{' . $name . '}', $template_parse);
                     $template_parse = str_replace(array('{|-', '-|}'), '', $template_parse); //清空边界
-                    if ($is_new) {
+                    if (1) {
                         $add_fields[$name] = array(
                             'name' => $name,
                             'leipiplugins' => $attr_arr_all['leipiplugins']
