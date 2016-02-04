@@ -33,6 +33,7 @@ class FormController extends AdminController
         $content    = Request::get('design_content');
         $resp       = $form->parse_form($content);
         $sql        = $form->parse_table($obj->id, $resp['add_fields']);
+        dd($resp['fields']);
         $data = array(
             'fields'=>$resp['fields'],
             'content'=>$resp['template'],
