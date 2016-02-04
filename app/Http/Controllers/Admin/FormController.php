@@ -26,6 +26,8 @@ class FormController extends AdminController
         $content    = Request::get('design_content');
         $resp       = $form->parse_form($content);
         $data = array(
+            'form_name' => Request::get('form_name'),
+            'form_desc' => Request::get('form_desc'),
             'fields'=>$resp['fields'],
             'content'=>$resp['template'],
             'content_parse'=>$resp['parse'],
