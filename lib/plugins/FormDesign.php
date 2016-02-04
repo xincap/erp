@@ -246,7 +246,7 @@ class FormDesign {
         
         $schema = new \Doctrine\DBAL\Schema\Schema();
         $table  = $schema->createTable($tname);
-        $table->addColumn("id", "bigint", array("unsigned" => true,'comment'=>'自动编号'));
+        $table->addColumn("id", "bigint", array("unsigned" => true,'autoincrement'=>true,'comment'=>'自动编号'));
         $table->addColumn("user_id", "bigint", array("unsigned" => true,'comment'=>'用户ID'));
         $table->addColumn("form_id", "bigint", array("unsigned" => true,'comment'=>'外键ID'));
         $comment    = $add_fields['comment'];
@@ -267,8 +267,11 @@ class FormDesign {
         $table->addIndex(['user_id']);
         $table->addIndex(['form_id']);
         $table->setPrimaryKey(array("id"));
-        $foreign = $manager->listTableDetails(config('database.connections.mysql.prefix').'form');
-        $table->addForeignKeyConstraint($foreign, ['form_id'], ['id']);
+        
+        $form = $manager->listTableDetails(config('database.connections.mysql.prefix').'form');
+        $table->addForeignKeyConstraint($form, ['form_id'], ['id']);
+        $user = $manager->listTableDetails(config('database.connections.mysql.prefix').'user');
+        $table->addForeignKeyConstraint($user, ['user_id'], ['id']);
 
         if ($exist === false) {
             $queries    = $schema->toSql($manager->getDatabasePlatform());

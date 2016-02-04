@@ -88,6 +88,7 @@ class FormController extends AdminController
                 $data->$k = $all[$k];
             }
         }
+        $data->user_id  = Request::user()->id;
         $ret    = $data->save();
         return redirect('/admin/form/submit?id='.$id);
     }
