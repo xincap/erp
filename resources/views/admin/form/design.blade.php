@@ -95,6 +95,7 @@ var leipiFormDesign = {
 
     <form method="post" id="saveform" name="saveform" action="/admin/form/design?id={{ $obj['id'] or '0' }}" method="post">
         <input type="hidden" name="id" value="{{ $obj['id'] or '0' }}">
+        {!! csrf_field() !!}
         <div class="row">
             <div class="well well-small">
                 <span class="pull-right">

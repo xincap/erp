@@ -13,6 +13,7 @@
     <div class="row">
         <form action="/admin/form/submit" method="post">
             <input type="hidden" value="{{$obj['id']}}" name="form_id">
+            {!! csrf_field() !!}
             <p>
                 {!! $text !!}
             </p>
