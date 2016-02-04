@@ -16,8 +16,12 @@ class Form extends Model {
       'fields','content','content_parse','content_data'
     ];
     
-    public function getContentDatAttribute(){
-        return json_decode($this->content_data);
+    
+    public function setContentDataAttribute($value){
+        $this->attributes['content_data']   = json_encode($value,JSON_UNESCAPED_UNICODE);
     }
-
+    
+    public function getContentDataAttribute($value){
+        return json_decode($value, true);
+    }
 }

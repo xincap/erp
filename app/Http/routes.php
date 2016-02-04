@@ -54,6 +54,10 @@ Route::group(['middleware' => ['web'], 'namespace' => 'Admin', 'prefix' => 'admi
     
     Route::get('/flow/design', 'FlowController@getDesign');
     Route::post('/flow/design', 'FlowController@postDesign');
+    Route::get('/flow/draw', 'FlowController@getDraw');
+    Route::post('/flow/draw', 'FlowController@postDraw');
+    Route::post('/flow/process', 'FlowController@postProcess');
+    Route::get('/flow/attribute', 'FlowController@getAttribute');
 });
 
 Route::group(['middleware' => 'web', 'prefix' => 'admin'], function () {

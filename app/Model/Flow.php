@@ -11,4 +11,8 @@ class Flow extends Model
     protected $fillable = [
       'flow_type','form_id','flow_name','flow_desc'  
     ];
+    
+    public function processes(){
+        return $this->hasMany('XinGroup\Model\FlowProcess', 'flow_id', 'id');
+    }
 }
