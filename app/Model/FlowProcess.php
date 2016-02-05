@@ -39,6 +39,9 @@ class FlowProcess extends Model
     public function getSecretFieldsAttribute($value){
         return explode(',', $value);
     }
+//    public function getChildBackProcessAttribute($value){
+//        return explode(',', $value);
+//    }
     
     public function setLockFieldsAttribute($value){
         $this->attributes['lock_fields']   = implode(',', $value);

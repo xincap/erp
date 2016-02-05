@@ -36,21 +36,20 @@
             @endif
         </ul>
 
-        <form class="form-horizontal" target="hiddeniframe" method="post" id="flow_attribute" name="flow_attribute" action="{:U('/Flowdesign/save_attribute')}">
-            <input type="hidden" name="flow_id" value="{$one.flow_id}"/>
-            <input type="hidden" name="process_id" value="{$one.id}"/>
+        <form class="form-horizontal" target="hiddeniframe" method="post" id="flow_attribute" name="flow_attribute" action="/admin/flow/save_attribute">
+            <input type="hidden" name="flow_id" value="{{$one['flow_id']}}"/>
+            <input type="hidden" name="process_id" value="{{$one['id']}}"/>
             <div class="tab-content">
                 @if($op == 'basic')
                 <div class="tab-pane active" id="attrBasic">
                 @else
                 <div class="tab-pane" id="attrBasic">
                 @endif
-                
 
                     <div class="control-group">
                         <label class="control-label" for="process_name">步骤名称</label>
                         <div class="controls">
-                            <input type="text" id="process_name" placeholder="步骤名称" name="process_name" value="{$one.process_name}">
+                            <input type="text" id="process_name" placeholder="步骤名称" name="process_name" value="{{$one['process_name']}}">
                         </div>
                     </div>
 
@@ -106,9 +105,13 @@
                             <div class="controls">
                                 <select name="child_id" >
                                     <option value="0">--请选择--</option>
-                                    <volist name="child_flow_list" id="vo">
-                                        <option value="{$vo.id}" <if condition="$vo['id'] eq $one['child_id']">selected="selected"</if>>{$vo.flow_name}</option>
-                                    </volist>
+                                    @foreach($child_flow_list as $vo)
+                                        @if($vo->id == $one['child_id'])
+                                            <option value="{{$vo->id}}" selected="selected">{{$vo->flow_name}}</option>
+                                        @else
+                                            <option value="{{$vo->id}}">{{$vo->flow_name}}</option>
+                                        @endif
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -117,11 +120,20 @@
                             <label class="control-label" >子流程结束后动作</label>
                             <div class="controls">
                                 <label class="radio inline">
-                                    <input type="radio" name="child_after" value="1" <if condition="$one['child_after'] eq 1">checked="checked"</if>>
+                                    @if($one['child_after'] == 1)
+                                        <input type="radio" name="child_after" value="1" checked="checked">
+                                    @else
+                                        <input type="radio" name="child_after" value="1" >
+                                    @endif
+                                    
                                     同时结束父流程
                                 </label>
                                 <label class="radio inline">
-                                    <input type="radio" name="child_after" value="2"  <if condition="$one['child_after'] eq 2">checked="checked"</if>>
+                                    @if($one['child_after'] == 2)
+                                        <input type="radio" name="child_after" value="2" checked="checked">
+                                    @else
+                                        <input type="radio" name="child_after" value="2">
+                                    @endif
                                     返回父流程步骤
                                 </label>
                             </div>
@@ -132,12 +144,13 @@
                             <div class="controls">
                                 <select name="child_back_process" >
                                     <option value="0">--默认--</option>
-                                    <volist name="process_to_list" id="vo">
-                                        <option value="{$vo.id}" <if condition="in_array($vo['id'],$one['child_back_process'])">selected="selected"</if>>{$vo.process_name}</option>
-                                    </volist>
-                                    <!--option value="1">步骤1</option>
-                                    <option value="2">步骤2</option>
-                                    <option value="3">步骤3</option-->
+                                    @foreach($process_to_list as $key => $vo)
+                                        @if($vo->id == $one['child_back_process'])
+                                            <option value="{{$vo->id}}" selected="selected">{{$vo->process_name}}</option>
+                                        @else
+                                            <option value="{{$vo->id}}">{{$vo->process_name}}</option>
+                                        @endif
+                                    @endforeach
                                 </select>
                                 <span class="help-inline">默认为当前步骤下一步</span>
                             </div>
@@ -149,9 +162,11 @@
 
                 </div><!-- attrBasic end -->
 
-                <div class="tab-pane <if condition="$op eq 'form'">active</if>" id="attrForm">
-
-
+                @if($op == 'form')
+                <div class="tab-pane active" id="attrForm">
+                @else
+                <div class="tab-pane" id="attrForm">
+                @endif
 
                     <table class="table table-condensed table-bordered table-hover" >
                         <tr>
@@ -166,43 +181,45 @@
                             <th style="width:100px;"><label title="保密字段对于本步骤主办人、经办人均为不可见"  class="checkbox"><input type="checkbox" id="secret">保密字段</label></th>
                         </tr>
                         <tbody>
-
                             <!-- 这里是表单设计器的字段 start -->
-                        <volist name="form_one['content_data']" id="vo">
-                            {//checkboxs是特殊的，他的名字是 parse_name }
-                            <if condition="$vo['leipiplugins'] eq 'checkboxs'">
+                         @foreach($form_one['content_data'] as $key =>$vo)
+                         
+                            @if($vo['leipiplugins'] == 'checkboxs')
                                 <tr>
-                                    <th>{$vo.title}</th>
-                                    <td>{$form_plugins[$vo['leipiplugins']]}</td>
-                                    <td><label class="checkbox"><input type="checkbox" name="write_fields[]" <if condition="in_array($vo['parse_name'],$one['write_fields'])">checked="checked"</if> value="{$vo.parse_name}" key="{$key}" id="write_{$key}"></label></td>
-                                    <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"  <if condition="in_array($vo['parse_name'],$one['secret_fields'])">checked="checked"</if> value="{$vo.parse_name}" key="{$key}" id="secret_{$key}"></label></td>
+                                    <th>{{$vo['title']}}</th>
+                                    <td>{{$form_plugin[$vo['leipiplugins']]}}</td>
+                                    @if(in_array($vo['parse_name'], $one['write_fields']))
+                                        <td><label class="checkbox"><input type="checkbox" name="write_fields[]" checked="checked" value="{{$vo['parse_name']}}" key="{{$key}}" id="write_{{$key}}"></label></td>
+                                    @else
+                                        <td><label class="checkbox"><input type="checkbox" name="write_fields[]" value="{{$vo['parse_name']}}" key="{{$key}}" id="write_{{$key}}"></label></td>
+                                    @endif
+                                    @if(in_array($vo['parse_name'],$one['secret_fields']))
+                                        <td><label class="checkbox"><input type="checkbox" name="secret_fields[]" checked="checked" value="{{$vo['parse_name']}}" key="{{$key}}" id="secret_{{$key}}"></label></td>
+                                    @else
+                                        <td><label class="checkbox"><input type="checkbox" name="secret_fields[]" value="{{$vo['parse_name']}}" key="{{$key}}" id="secret_{{$key}}"></label></td>
+                                    @endif
                                 </tr>
-
-                                <else/>
-                                <tr>
-                                    <th>{$vo.title}</th>
-                                    <td>{$form_plugins[$vo['leipiplugins']]}</td>
-                                    <td><label class="checkbox"><input type="checkbox" name="write_fields[]" <if condition="in_array($vo['name'],$one['write_fields'])">checked="checked"</if> value="{$vo.name}" key="{$key}" id="write_{$key}"></label></td>
-                                    <td><label class="checkbox"><input type="checkbox" name="secret_fields[]"  <if condition="in_array($vo['name'],$one['secret_fields'])">checked="checked"</if> value="{$vo.name}" key="{$key}" id="secret_{$key}"></label></td>
+                            @else
+                                 <tr>
+                                    <th>{{$vo['title']}}</th>
+                                    <td>{{$form_plugin[$vo['leipiplugins']]}}</td>
+                                    @if(in_array($vo['name'],$one['write_fields']))
+                                        <td><label class="checkbox"><input type="checkbox" name="write_fields[]" checked="checked" value="{{$vo['name']}}" key="{{$key}}" id="write_{{$key}}"></label></td>
+                                    @else
+                                        <td><label class="checkbox"><input type="checkbox" name="write_fields[]" value="{{$vo['name']}}" key="{{$key}}" id="write_{{$key}}"></label></td>
+                                    @endif
+                                    @if(in_array($vo['name'],$one['secret_fields']))
+                                        <td><label class="checkbox"><input type="checkbox" name="secret_fields[]" checked="checked" value="{{$vo['name']}}" key="{{$key}}" id="secret_{{$key}}"></label></td>
+                                    @else
+                                        <td><label class="checkbox"><input type="checkbox" name="secret_fields[]" value="{{$vo['name']}}" key="{{$key}}" id="secret_{{$key}}"></label></td>
+                                    @endif
                                 </tr>
-                            </if>
-                        </volist>
-                        <!--tr>
-                          <th>姓名</th>
-                          <td>文本框</td>
-                          <td><label style="display: block;" ><input type="checkbox" name="write[]" checked="true" value="data_2" key="1" id="write_1"></label></td>
-                          <td><label style="display: block;"><input type="checkbox" name="secret[]" disabled="true" value="data_2" key="1" id="secret_1"></label></td>
-                        </tr-->
-                        <!-- 这里是表单设计器的字段 end -->
-
-
+                            @endif
+                         @endforeach
+                         <!-- 这里是表单设计器的字段 end -->
                         </tbody>
                     </table>
-
-
-
                 </div><!-- attrForm end -->
-
 
                 <div class="tab-pane" id="attrPower">
 
@@ -211,43 +228,42 @@
                         <div class="controls">
                             <select name="auto_person" id="auto_person_id">
                                 <option value="0">不自动选人</option>
-                                <option value="1" <if condition="$one['auto_person'] eq 1">selected="selected"</if>>发起人</option>
-                                <option value="2" <if condition="$one['auto_person'] eq 2">selected="selected"</if>>发起人的部门主管</option>
-                                <option value="3" <if condition="$one['auto_person'] eq 3">selected="selected"</if>>处理人的部门主管</option>
-                                <option value="5" <if condition="$one['auto_person'] eq 5">selected="selected"</if>>指定角色</option>
-                                <option value="4" <if condition="$one['auto_person'] eq 4">selected="selected"</if>>指定人员</option>
+                                <option value="1" @if($one['auto_person'] == 1) selected="selected" @endif>发起人</option>
+                                <option value="2" @if($one['auto_person'] == 2) selected="selected" @endif>发起人的部门主管</option>
+                                <option value="3" @if($one['auto_person'] == 3) selected="selected" @endif>处理人的部门主管</option>
+                                <option value="5" @if($one['auto_person'] == 5) selected="selected" @endif>指定角色</option>
+                                <option value="4" @if($one['auto_person'] == 4) selected="selected" @endif>指定人员</option>
                             </select>
                             <span class="help-inline">预先设置自动选人，更方便转交工作</span>
                         </div>
-                        <div class="controls <if condition="$one['auto_person'] eq 0">hide</if>" id="auto_unlock_id" >
+                        <div class="controls @if($one['auto_person'] == 0) hide @endif" id="auto_unlock_id" >
                             <label class="checkbox">
-                                <input type="checkbox" name="auto_unlock" value="1" <if condition="$one['auto_unlock'] eq 1">checked="checked"</if>>允许更改
+                                <input type="checkbox" name="auto_unlock" value="1" @if($one['auto_unlock'] == 1) checked="checked" @endif>允许更改
                             </label>
                         </div>
 
-                        <div id="auto_person_4" <if condition="$one['auto_person'] neq 4">class="hide"</if>>
+                        <div id="auto_person_4" @if($one['auto_person'] != 4) class="hide" @endif>
                             <div class="control-group">
                                 <label class="control-label">指定主办人</label>
                                 <div class="controls">
-                                    <input type="hidden" name="auto_sponsor_ids" id="auto_sponsor_ids" value="{$one.auto_sponsor_ids}">
-                                    <input class="input-xlarge" readonly="readonly" type="text" placeholder="指定主办人" name="auto_sponsor_text" id="auto_user_text" value="{$one.auto_user_text}"> <a href="javascript:void(0);" class="btn" onclick="superDialog('{:U(' / demo / super_dialog / op / user')}', 'auto_user_text', 'auto_sponsor_ids');">选择</a>
-
+                                    <input type="hidden" name="auto_sponsor_ids" id="auto_sponsor_ids" value="{{$one['auto_sponsor_ids']}}">
+                                    <input class="input-xlarge" readonly="readonly" type="text" placeholder="指定主办人" name="auto_sponsor_text" id="auto_user_text" value="{{$one['auto_sponsor_text']}}"> <a href="javascript:void(0);" class="btn" onclick="superDialog(\'/demo/super_dialog/op/user\', \'auto_user_text\', \'auto_sponsor_ids\');">选择</a>
                                 </div> 
                             </div>
                             <div class="control-group">
                                 <label class="control-label">指定经办人</label>
                                 <div class="controls">
-                                    <input type="hidden" name="auto_respon_ids" id="auto_respon_ids" value="{$one.auto_respon_ids}">
-                                    <input class="input-xlarge" readonly="readonly" type="text" placeholder="指定经办人" name="auto_respon_text" id="auto_userop_text" value="{$one.auto_userop_text}"> <a href="javascript:void(0);" class="btn" onclick="superDialog('{:U(' / demo / super_dialog / op / user')}', 'auto_userop_text', 'auto_respon_ids');">选择</a>
+                                    <input type="hidden" name="auto_respon_ids" id="auto_respon_ids" value="{{$one['auto_respon_ids']}}">
+                                    <input class="input-xlarge" readonly="readonly" type="text" placeholder="指定经办人" name="auto_respon_text" id="auto_userop_text" value="{{$one['auto_respon_text']}}"> <a href="javascript:void(0);" class="btn" onclick="superDialog(\'/demo/super_dialog/op/user\', \'auto_userop_text\', \'auto_respon_ids\');">选择</a>
                                 </div> 
                             </div>
                         </div>
-                        <div id="auto_person_5" <if condition="$one['auto_person'] neq 5">class="hide"</if>>
+                        <div id="auto_person_5" @if($one['auto_person'] != 5) class="hide" @endif>
                             <div class="control-group">
                                 <label class="control-label">指定角色</label>
                                 <div class="controls">
-                                    <input type="hidden" name="auto_role_ids" id="auto_role_value" value="{$one.auto_role}">
-                                    <input class="input-xlarge" readonly="readonly" type="text" placeholder="指定角色" name="auto_role_text" id="auto_role_text" value="{$one.auto_role_text}"> <a href="javascript:void(0);" class="btn" onclick="superDialog('{:U(' / demo / super_dialog / op / role')}', 'auto_role_text', 'auto_role_value');">选择</a>
+                                    <input type="hidden" name="auto_role_ids" id="auto_role_value" value="{{$one['auto_role_ids']}}">
+                                    <input class="input-xlarge" readonly="readonly" type="text" placeholder="指定角色" name="auto_role_text" id="auto_role_text" value="{{$one['auto_role_text']}}"> <a href="javascript:void(0);" class="btn" onclick="superDialog(\'/demo/super_dialog/op/role\', \'auto_role_text\', \'auto_role_value\');">选择</a>
                                 </div> 
                             </div>
                         </div>
@@ -258,35 +274,31 @@
                     <div class="control-group">
                         <label class="control-label">授权人员</label>
                         <div class="controls">
-                            <input type="hidden" name="range_user_ids" id="range_user_ids" value="{$one.range_user_ids}">
-                            <input class="input-xlarge" readonly="readonly" type="text" placeholder="选择人员" name="range_user_text" id="range_user_text" value="{$one.range_user_text}"> <a href="javascript:void(0);" class="btn" onclick="superDialog('{:U(' / demo / super_dialog / op / user')}', 'range_user_text', 'range_user_ids');">选择</a>
+                            <input type="hidden" name="range_user_ids" id="range_user_ids" value="{{$one['range_user_ids']}}">
+                            <input class="input-xlarge" readonly="readonly" type="text" placeholder="选择人员" name="range_user_text" id="range_user_text" value="{{$one['range_user_text']}}"> <a href="javascript:void(0);" class="btn" onclick="superDialog(\'/demo/super_dialog/op/user\', \'range_user_text\', \'range_user_ids\');">选择</a>
                         </div> 
                     </div>
 
                     <div class="control-group">
                         <label class="control-label">授权部门</label>
                         <div class="controls">
-                            <input type="hidden" name="range_dept_ids" id="range_dept_ids" value="{$one.range_dept_ids}">
-                            <input class="input-xlarge" readonly="readonly" type="text" placeholder="选择部门" name="range_dept_text" id="range_dept_text" value="{$one.range_dept_text}"> <a href="javascript:void(0);" class="btn" onclick="superDialog('{:U(' / demo / super_dialog / op / dept')}', 'range_dept_text', 'range_dept_ids');">选择</a>
+                            <input type="hidden" name="range_dept_ids" id="range_dept_ids" value="{{$one['range_dept_ids']}}">
+                            <input class="input-xlarge" readonly="readonly" type="text" placeholder="选择部门" name="range_dept_text" id="range_dept_text" value="{{$one['range_dept_text']}}"> <a href="javascript:void(0);" class="btn" onclick="superDialog(\'/demo/super_dialog/op/dept\', \'range_dept_text\', \'range_dept_ids\');">选择</a>
                         </div> 
                     </div>
 
                     <div class="control-group">
                         <label class="control-label">授权角色</label>
                         <div class="controls">
-                            <input type="hidden" name="range_role_ids" id="range_role_ids" value="{$one.range_role_ids}">
-                            <input class="input-xlarge" readonly="readonly" type="text" placeholder="选择角色" name="range_role_text" id="range_role_text" value="{$one.range_role_text}"> <a href="javascript:void(0);" class="btn" onclick="superDialog('{:U(' / demo / super_dialog / op / role')}', 'range_role_text', 'range_role_ids');">选择</a>
+                            <input type="hidden" name="range_role_ids" id="range_role_ids" value="{{$one['range_role_ids']}}">
+                            <input class="input-xlarge" readonly="readonly" type="text" placeholder="选择角色" name="range_role_text" id="range_role_text" value="{{$one['range_role_text']}}"> <a href="javascript:void(0);" class="btn" onclick="superDialog(\'/demo/super_dialog/op/role\', \'range_role_text\', \'range_role_ids\');">选择</a>
                         </div> 
                     </div>
-
-
                     <div class="control-group">
                         <div class="controls">
                             <span class="help-block">当需要手动选人时，则授权范围生效</span>
                         </div> 
                     </div>
-
-
 
                 </div><!-- attrPower end -->
 
@@ -297,8 +309,8 @@
                         <label class="control-label" >交接方式</label>
                         <div class="controls">
                             <select name="receive_type" >
-                                <option value="0" <if condition="$one.receive_type eq 0">selected="selected"</if>>明确指定主办人</option>
-                                <option value="1" <if condition="$one.receive_type eq 1">selected="selected"</if>>先接收为主办人</option>
+                                <option value="0" @if($one['receive_type'] == 0) selected="selected" @endif>明确指定主办人</option>
+                                <option value="1" @if($one['receive_type'] == 1) selected="selected" @endif>先接收为主办人</option>
                             </select>
                         </div>
                     </div>
@@ -306,10 +318,10 @@
                     <div class="control-group">
                         <div class="controls">
                             <label class="checkbox">
-                                <input type="checkbox" name="is_user_end" value="1" <if condition="$one.is_user_end eq 1">checked="checked"</if>>允许主办人办结流程(最后步骤默认允许)
+                                <input type="checkbox" name="is_user_end" value="1" @if($one['is_user_end'] == 1)checked="checked" @endif>允许主办人办结流程(最后步骤默认允许)
                             </label>
                             <label class="checkbox">
-                                <input type="checkbox" name="is_userop_pass" value="1" <if condition="$one.is_userop_pass eq 1">checked="checked"</if>>经办人可以转交下一步
+                                <input type="checkbox" name="is_userop_pass" value="1" @if($one['is_userop_pass'] == 0)checked="checked" @endif>经办人可以转交下一步
                             </label>
                         </div>
                     </div>
@@ -319,9 +331,9 @@
                         <label class="control-label" >会签方式</label>
                         <div class="controls">
                             <select name="is_sing" >
-                                <option value="1" <if condition="$one.is_sing eq 1">selected="selected"</if>>允许会签</option>
-                                <option value="2" <if condition="$one.is_sing eq 2">selected="selected"</if>>禁止会签</option>
-                                <option value="3" <if condition="$one.is_sing eq 3">selected="selected"</if>>强制会签</option>
+                                <option value="1" @if($one['is_sing'] == 1) selected="selected" @endif>允许会签</option>
+                                <option value="2" @if($one['is_sing'] == 2) selected="selected" @endif>禁止会签</option>
+                                <option value="3" @if($one['is_sing'] == 3) selected="selected" @endif>强制会签</option>
                             </select>
                             <span class="help-inline">如果设置强制会签，则本步骤全部人都会签后才能转交或办结</span>
                         </div>
@@ -331,29 +343,24 @@
                         <label class="control-label" >可见性</label>
                         <div class="controls">
                             <select name="sign_look" >
-                                <option value="1" <if condition="$one.sign_look eq 1">selected="selected"</if>>总是可见</option>
-                                <option value="2" <if condition="$one.sign_look eq 2">selected="selected"</if>>本步骤之间经办人不可见</option>
-                                <option value="3" <if condition="$one.sign_look eq 3">selected="selected"</if>>其它步骤不可见</option>
+                                <option value="1" @if($one['sign_look'] == 1) selected="selected" @endif>总是可见</option>
+                                <option value="2" @if($one['sign_look'] == 2) selected="selected" @endif>本步骤之间经办人不可见</option>
+                                <option value="3" @if($one['sign_look'] == 3) selected="selected" @endif>其它步骤不可见</option>
                             </select>
                         </div>
                     </div>
-
-
                     <hr/>
-
                     <div class="control-group">
                         <label class="control-label" >回退方式</label>
                         <div class="controls">
                             <select name="is_back" >
-                                <option value="1" <if condition="$one.is_back eq 1">selected="selected"</if>>不允许</option>
-                                <option value="2" <if condition="$one.is_back eq 2">selected="selected"</if>>允许回退上一步</option>
-                                <option value="3" <if condition="$one.is_back eq 3">selected="selected"</if>>允许回退之前步骤</option>
+                                <option value="1" @if($one['is_back'] == 1) selected="selected" @endif>不允许</option>
+                                <option value="2" @if($one['is_back'] == 2) selected="selected" @endif>允许回退上一步</option>
+                                <option value="3" @if($one['is_back'] == 3) selected="selected" @endif>允许回退之前步骤</option>
                             </select>
                         </div>
                     </div>
-
-
-                </div><!-- attrOperate end -->
+                </div>
 
 
                 @if($op == 'judge')
@@ -374,7 +381,7 @@
 
                             <!--模板-->
                             <tr id="tpl" class="hide">    
-                                <td style="width: 100px;">@text</td>
+                                <td style="width: 100px;">\@text</td>
                                 <td>
                                     <table class="table table-condensed">
                                         <tbody>
@@ -383,13 +390,13 @@
                                                     <select id="field_\@a" class="input-medium">
                                                         <option value="">选择字段</option>
                                                         <!-- 表单字段 start -->
-                                                        <volist name="form_one['content_data']" id="vo">
-                                                            <if condition="$vo['leipiplugins'] eq 'checkboxs'">
-                                                                <option value="{$vo.parse_name}">{$vo.title}</option>
-                                                                <else/>
-                                                                <option value="{$vo.name}">{$vo.title}</option>
-                                                            </if>
-                                                        </volist>
+                                                        @foreach($form_one['content_data'] as $vo)
+                                                            @if($vo['leipiplugins'] == 'checkboxs')
+                                                                <option value="{{$vo['parse_name']}}">{{$vo['title']}}</option>
+                                                            @else
+                                                                <option value="{{$vo['name']}}">{{$vo['title']}}</option>
+                                                            @endif
+                                                        @endforeach
                                                         <!-- 表单字段 end -->  
                                                     </select>
                                                     <select id="condition_\@a" class="input-small">
@@ -410,9 +417,9 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group">
-                                                        <button type="button" class="btn btn-small" onclick="fnAddLeftParenthesis('@a')">（</button>
-                                                        <button type="button" class="btn btn-small" onclick="fnAddRightParenthesis('@a')">）</button>
-                                                        <button type="button" onclick="fnAddConditions('@a')" class="btn btn-small">新增</button>
+                                                        <button type="button" class="btn btn-small" onclick="fnAddLeftParenthesis("#a")">（</button>
+                                                        <button type="button" class="btn btn-small" onclick="fnAddRightParenthesis("#a")">）</button>
+                                                        <button type="button" onclick="fnAddConditions("#a")" class="btn btn-small">新增</button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -422,15 +429,15 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group">
-                                                        <button type="button" onclick="fnDelCon('@a')" class="btn btn-small">删行</button>
-                                                        <button type="button" onclick="fnClearCon('@a')" class="btn btn-small">清空</button>
+                                                        <button type="button" onclick="fnDelCon("#a")" class="btn btn-small">删行</button>
+                                                        <button type="button" onclick="fnClearCon("#a")" class="btn btn-small">清空</button>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <input id="process_in_desc_\@a" type="text" name="process_in_desc_@a" style="width:98%;">
-                                                    <input name="process_in_set_@a" id="process_in_set_\@a" type="hidden">
+                                                    <input id="process_in_desc_#a" type="text" name="process_in_desc_#a" style="width:98%;">
+                                                    <input name="process_in_set_#a" id="process_in_set_#a" type="hidden">
                                                 </td>
                                                 <td>
                                                     <span class="xc1">不符合条件时的提示</span>
@@ -450,10 +457,6 @@
                     <input type="hidden" name="process_condition" id="process_condition">
 
 
-
-
-
-
                 </div><!-- attrJudge end -->
                 @if($op == 'style')
                 <div class="tab-pane style " id="attrStyle">
@@ -464,14 +467,14 @@
                     <div class="control-group">
                         <label class="control-label" for="process_name">尺寸</label>
                         <div class="controls">
-                            <input type="text" class="input-small" name="style_width" id="style_width" placeholder="宽度PX" value="{$one.style.width}"> X <input type="text" class="input-small" name="style_height" id="style_height" placeholder="高度PX"  value="{$one.style.height}">
+                            <input type="text" class="input-small" name="style[width]" id="style_width" placeholder="宽度PX" value="{{$one['style']['width']}}"> X <input type="text" class="input-small" name="style[height]" id="style_height" placeholder="高度PX"  value="{{$one['style']['height']}}">
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label" for="process_name">字体颜色</label>
                         <div class="controls">
-                            <input type="text" class="input-small" name="style_color" id="style_color" placeholder="#000000" value="{$one.style.color}">
+                            <input type="text" class="input-small" name="style[color]" id="style_color" placeholder="#000000" value="{{$one['style']['color']}}">
                             <div class="colors" org-bind="style_color">
                                 <ul>
                                     <li class="Black active" org-data="#000" title="Black">1</li>
@@ -495,7 +498,7 @@
                     <div class="control-group">
                         <label class="control-label" for="process_name"><span class="process-flag badge badge-inverse"><i class="icon-star-empty icon-white" id="style_icon_preview"></i></span> 图标</label>
                         <div class="controls">
-                            <input type="text" class="input-medium" name="style_icon" id="style_icon" placeholder="icon" value="{$one.style.icon}">
+                            <input type="text" class="input-medium" name="style[icon]" id="style_icon" placeholder="icon" value="{{$one['style']['icon']}}">
                             <div class="colors" org-bind="style_icon">
                                 <ul>
                                     <li class="Black active" org-data="icon-star-empty" title="Black"><i class="icon-star-empty icon-white"></i></li>
@@ -511,14 +514,6 @@
                                 </ul>
                                 <a href="http://v2.bootcss.com/base-css.html#icons" target="_blank">更多</a>
                             </div>
-                        </div>
-                    </div>
-
-
-                    <div class="control-group">
-                        <label class="control-label"></label>
-                        <div class="controls">
-                            <span class="help-inline">想要更多设置，可以自行添加，或反馈给我们 [ 雷劈网 ]。</span>
                         </div>
                     </div>
 
@@ -550,10 +545,6 @@
             </div>
         </form>
         <script type="text/javascript">
-            /*var flow_id =  '{$one.flow_id}';//流程ID
-             var process_id = '{$one.id}';//步骤ID
-             var get_con_url = "{:U('/Flowdesign/get_con')}";//获取条件
-             */
             var _out_condition_data = {{$one['out_condition']}};</script>
         <script type="text/javascript" src="/js/flowdesign/attribute.js"></script>
     </body>
