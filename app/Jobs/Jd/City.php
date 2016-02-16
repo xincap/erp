@@ -1,6 +1,6 @@
 <?php
 
-namespace XinGroup\Jobs;
+namespace XinGroup\Jobs\Jd;
 
 use XinGroup\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
@@ -10,19 +10,21 @@ use Jd\JdClient;
 use Jd\Request\AreasCountyGetRequest;
 use Event;
 use XinGroup\Model\AddressCity as Model;
+use XinGroup\Jobs\Jd\County;
 
 class City extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
+    protected $data = [];
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -30,12 +32,11 @@ class City extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function handle($data)
+    public function handle()
     {
-        
         $obj    = new Model();
-        $obj->name  = $data['areaName'];
-        $obj->province_id   = $data['province_id'];
+        $obj->name  = $this->data['areaName'];
+        $obj->province_id   = $this->data['province_id'];
         $obj->save();
         
         
@@ -44,7 +45,7 @@ class City extends Job implements ShouldQueue
         $c->setAppSecret(env('JD_APP_SECRET'));
         
         $req = new AreasCountyGetRequest();
-        $req->setParentId($data['areaId']);
+        $req->setParentId($this->data['areaId']);
         $resp   = $c->execute($req);
         if(isset($resp['zh_desc'])){
             Log::error($resp['zh_desc']);
@@ -52,7 +53,8 @@ class City extends Job implements ShouldQueue
         $data   = $resp['baseAreaServiceResponse']['data'];
         foreach ($data as $key => $item) {
             $item['city_id']    = $obj->id;
-            Event::fire('jd.county', [$item]);
+            $event  = new County($item);
+            Event::fire($event);
         }
     }
 }

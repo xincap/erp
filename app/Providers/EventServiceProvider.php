@@ -25,21 +25,6 @@ class EventServiceProvider extends ServiceProvider {
             \XinGroup\Listeners\UserLogout::class,
             \XinGroup\Jobs\User\UserLogout::class,
         ],
-        'jd.province' => [
-            \XinGroup\Jobs\Province::class,
-        ],
-        'jd.city' => [
-            \XinGroup\Jobs\City::class,
-        ],
-        'jd.county' => [
-            \XinGroup\Jobs\County::class,
-        ],
-        'jd.town' => [
-            \XinGroup\Jobs\Town::class,
-        ],
-        'sms.sent' => [
-            \XinGroup\Jobs\AliDaYu::class,
-        ],
     ];
 
     /**

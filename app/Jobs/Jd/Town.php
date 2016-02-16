@@ -1,6 +1,6 @@
 <?php
 
-namespace XinGroup\Jobs;
+namespace XinGroup\Jobs\Jd;
 
 use XinGroup\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
@@ -12,14 +12,15 @@ class Town extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
+    protected $data = [];
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -27,11 +28,11 @@ class Town extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function handle($data)
+    public function handle()
     {
         $obj    = new Model();
-        $obj->county_id = $data['county_id'];
-        $obj->name  = $data['areaName'];
+        $obj->county_id = $this->data['county_id'];
+        $obj->name  = $this->data['areaName'];
         $obj->save();
     }
 }
