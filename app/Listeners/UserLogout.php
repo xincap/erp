@@ -28,7 +28,7 @@ class UserLogout
             return true;
         }
         
-        if(($logout->user instanceof \XinGroup\Model\Customer)){
+        if(($logout->user instanceof \XinGroup\Model\User)){
             
         }
     }

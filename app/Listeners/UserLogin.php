@@ -26,7 +26,7 @@ class UserLogin {
             return true;
         }
         
-        if(($login->user instanceof \XinGroup\Model\Customer)){
+        if(($login->user instanceof XinGroup\Model\User)){
             
         }
     }

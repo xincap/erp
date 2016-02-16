@@ -1,6 +1,6 @@
 <?php
 
-namespace XinGroup\Jobs;
+namespace XinGroup\Jobs\User;
 
 use XinGroup\Jobs\Job;
 use Illuminate\Queue\SerializesModels;

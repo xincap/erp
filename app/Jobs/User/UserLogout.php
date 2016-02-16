@@ -1,12 +1,11 @@
 <?php
 
-namespace XinGroup\Jobs;
+namespace XinGroup\Jobs\User;
 
 use XinGroup\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Log;
 use Illuminate\Auth\Events\Logout;
 
 class UserLogout extends Job implements ShouldQueue

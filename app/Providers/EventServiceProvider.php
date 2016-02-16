@@ -19,11 +19,11 @@ class EventServiceProvider extends ServiceProvider {
         ],
         \Illuminate\Auth\Events\Login::class => [
             \XinGroup\Listeners\UserLogin::class,
-            \XinGroup\Jobs\UserLogin::class,
+            \XinGroup\Jobs\User\UserLogin::class,
         ],
         \Illuminate\Auth\Events\Logout::class => [
             \XinGroup\Listeners\UserLogout::class,
-            \XinGroup\Jobs\UserLogout::class,
+            \XinGroup\Jobs\User\UserLogout::class,
         ],
         'jd.province' => [
             \XinGroup\Jobs\Province::class,
