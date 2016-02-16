@@ -17,13 +17,14 @@ class UserLogin extends Job implements ShouldQueue {
         SerializesModels;
 
     protected $login;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
     public function __construct(Login $login) {
-        $this->login    = $login;
+        $this->login = $login;
     }
 
     /**
@@ -32,14 +33,16 @@ class UserLogin extends Job implements ShouldQueue {
      * @return void
      */
     public function handle() {
+
+        $data = [
+            'user_id' => $this->login->user->id,
+            'ip' => $this->login->user->loginIp
+        ];
+        $log = UserLoginLog::forceCreate($data);
+    }
+    
+    public function failed(){
         
-        if (!is_object($this->login->user)) {
-            return true;
-        }
-
-        if(($login->user instanceof \XinGroup\Model\User)){
-
-        }        
     }
 
 }

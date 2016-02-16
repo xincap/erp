@@ -3,6 +3,8 @@
 namespace XinGroup\Listeners;
 
 use Illuminate\Auth\Events\Logout;
+use Event;
+use Log;
 
 class UserLogout
 {
@@ -29,8 +31,9 @@ class UserLogout
         }
         
         if(($logout->user instanceof \XinGroup\Model\User)){
-            $event  = new \XinGroup\Jobs\User\UserLogout($logout);
-            Event::fire($event);
+//            $event  = new \XinGroup\Jobs\User\UserLogout($logout);
+//            Event::fire($event);
+            Log::error('user '. $logout->user->id .' was logout.');
         }
     }
 }
