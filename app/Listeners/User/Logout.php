@@ -31,7 +31,7 @@ class Logout
         }
         
         if(($logout->user instanceof \XinGroup\Model\User)){
-            
+
         }
     }
 }
