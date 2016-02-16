@@ -18,10 +18,10 @@ class EventServiceProvider extends ServiceProvider {
             \SocialiteProviders\Weibo\WeiboExtendSocialite::class,
         ],
         \Illuminate\Auth\Events\Login::class => [
-            \XinGroup\Listeners\UserLogin::class,
+            \XinGroup\Listeners\User\Login::class,
         ],
         \Illuminate\Auth\Events\Logout::class => [
-            \XinGroup\Listeners\UserLogout::class,
+            \XinGroup\Listeners\User\Logout::class,
         ],
     ];
 

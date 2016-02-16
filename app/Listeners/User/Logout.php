@@ -3,8 +3,10 @@
 namespace XinGroup\Listeners;
 
 use Illuminate\Auth\Events\Logout;
+use Event;
+use Log;
 
-class UserLogout
+class Logout
 {
     /**
      * Create the event listener.
@@ -13,7 +15,7 @@ class UserLogout
      */
     public function __construct()
     {
-        //
+        
     }
 
     /**
@@ -29,8 +31,7 @@ class UserLogout
         }
         
         if(($logout->user instanceof \XinGroup\Model\User)){
-            $event  = new \XinGroup\Jobs\User\UserLogout($logout);
-            Event::fire($event);
+            
         }
     }
 }

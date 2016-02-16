@@ -76,11 +76,6 @@ class AuthController extends Controller
     }
     
     protected function authenticated(Request $request, Authenticatable $user){
-        UserLoginLog::create([
-            'user_id'   => $user->id,
-            'ip'        => '127.0.0.1',
-            'updated_at'    => $user->updated_at
-        ]);
         return redirect()->intended($this->redirectPath());
     }
 }
