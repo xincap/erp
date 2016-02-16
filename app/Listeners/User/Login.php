@@ -1,6 +1,6 @@
 <?php
 
-namespace XinGroup\Listeners;
+namespace XinGroup\Listeners\User;
 
 use Illuminate\Auth\Events\Login;
 use XinGroup\Model\UserLoginLog;
