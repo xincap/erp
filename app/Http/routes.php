@@ -33,33 +33,38 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api', 'prefix' => 'api'], f
 });
 
 Route::group(['middleware' => ['web'], 'namespace' => 'Customer', 'prefix' => 'customer'], function () {
+    Route::get('/', 'DefaultController@index');
     Route::get('login', 'AuthController@getLogin');
     Route::post('login', 'AuthController@postLogin');
     Route::get('logout', 'AuthController@logout');
     Route::get('register', 'AuthController@getRegister');
     Route::post('register', 'AuthController@postRegister');
-    Route::get('/', 'DefaultController@index');
-    Route::get('/oauth', 'DefaultController@oauth');
+    Route::get('oauth', 'DefaultController@oauth');
 });
 
 Route::group(['middleware' => ['web'], 'namespace' => 'Admin', 'prefix' => 'admin'], function() {
-    Route::get('/', 'DefaultController@index');
-    Route::get('/resource', 'ResourceController@getIndex');
-
-    Route::get('/form/design', 'FormController@getDesign');
-    Route::post('/form/design', 'FormController@postDesign');
-    Route::get('/form/preview', 'FormController@getPreview');
-    Route::get('/form/submit', 'FormController@getSubmit');
-    Route::post('/form/submit', 'FormController@postSubmit');
     
-    Route::get('/flow/design', 'FlowController@getDesign');
-    Route::post('/flow/design', 'FlowController@postDesign');
-    Route::get('/flow/draw', 'FlowController@getDraw');
-    Route::post('/flow/draw', 'FlowController@postDraw');
-    Route::post('/flow/process', 'FlowController@postProcess');
-    Route::get('/flow/attribute', 'FlowController@getAttribute');
+    
+    Route::get('/', 'DefaultController@index');
+    
+    Route::get('resource', 'ResourceController@getIndex');
+    
+    Route::get('login', 'AuthController@showLoginForm');
+    Route::post('login', 'AuthController@login');
+    Route::get('logout', 'AuthController@logout');
+    
+    Route::get('form/design', 'FormController@getDesign');
+    Route::post('form/design', 'FormController@postDesign');
+    Route::get('form/preview', 'FormController@getPreview');
+    Route::get('form/submit', 'FormController@getSubmit');
+    Route::post('form/submit', 'FormController@postSubmit');
+    
+    Route::get('flow/design', 'FlowController@getDesign');
+    Route::post('flow/design', 'FlowController@postDesign');
+    
+    Route::get('flow/draw', 'FlowController@getDraw');
+    Route::post('flow/draw', 'FlowController@postDraw');
+    Route::post('flow/process', 'FlowController@postProcess');
+    Route::get('flow/attribute', 'FlowController@getAttribute');
 });
 
-Route::group(['middleware' => 'web', 'prefix' => 'admin'], function () {
-    Route::auth();
-});

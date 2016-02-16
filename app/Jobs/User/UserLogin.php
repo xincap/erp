@@ -16,13 +16,14 @@ class UserLogin extends Job implements ShouldQueue {
     use InteractsWithQueue,
         SerializesModels;
 
+    protected $login;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct() {
-        
+    public function __construct(Login $login) {
+        $this->login    = $login;
     }
 
     /**
@@ -30,9 +31,9 @@ class UserLogin extends Job implements ShouldQueue {
      *
      * @return void
      */
-    public function handle(Login $login) {
+    public function handle() {
         
-        if (!is_object($login->user)) {
+        if (!is_object($this->login->user)) {
             return true;
         }
 

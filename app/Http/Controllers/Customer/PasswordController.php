@@ -1,6 +1,6 @@
 <?php
 
-namespace XinGroup\Http\Controllers\Auth;
+namespace XinGroup\Http\Controllers\Customer;
 
 use XinGroup\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;

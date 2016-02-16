@@ -29,7 +29,8 @@ class UserLogout
         }
         
         if(($logout->user instanceof \XinGroup\Model\User)){
-            
+            $event  = new \XinGroup\Jobs\User\UserLogout($logout);
+            Event::fire($event);
         }
     }
 }

@@ -12,14 +12,15 @@ class UserLogout extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
+    protected $logout;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Logout $logout)
     {
-        //
+        $this->logout   = $logout;
     }
 
     /**
@@ -27,9 +28,9 @@ class UserLogout extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function handle(Logout $logout)
+    public function handle()
     {
-        if(!is_object($logout->user)){
+        if(!is_object($this->logout->user)){
             return true;
         }
     }

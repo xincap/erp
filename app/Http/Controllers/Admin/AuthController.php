@@ -1,6 +1,6 @@
 <?php
 
-namespace XinGroup\Http\Controllers\Auth;
+namespace XinGroup\Http\Controllers\Admin;
 
 use XinGroup\Model\User;
 use Validator;

@@ -3,6 +3,7 @@
 namespace XinGroup\Listeners;
 
 use Illuminate\Auth\Events\Login;
+use Event;
 
 class UserLogin {
 
@@ -27,7 +28,8 @@ class UserLogin {
         }
         
         if(($login->user instanceof XinGroup\Model\User)){
-            
+            $event  = new \XinGroup\Jobs\User\UserLogin($login);
+            Event::fire($event);
         }
     }
 
