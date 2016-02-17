@@ -44,7 +44,6 @@ Route::group(['middleware' => ['web'], 'namespace' => 'Customer', 'prefix' => 'c
 
 Route::group(['middleware' => ['web'], 'namespace' => 'Admin', 'prefix' => 'admin'], function() {
     
-    
     Route::get('/', 'DefaultController@index');
     
     Route::get('resource', 'ResourceController@getIndex');
@@ -66,5 +65,6 @@ Route::group(['middleware' => ['web'], 'namespace' => 'Admin', 'prefix' => 'admi
     Route::post('flow/draw', 'FlowController@postDraw');
     Route::post('flow/process', 'FlowController@postProcess');
     Route::get('flow/attribute', 'FlowController@getAttribute');
+    Route::get('flow/save_attribute', 'FlowController@postSaveAttribute');
 });
 

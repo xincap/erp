@@ -9,6 +9,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
 use Event;
+use XinGroup\Events\FileUpload;
 
 class WelcomeController extends Controller {
 
@@ -25,6 +26,8 @@ class WelcomeController extends Controller {
 //        $data   = ['code'=> (string)mt_rand(10000, 99999),'product'=>'腾讯科技'];
 //        $mobile = '17717556505';
 //        Event::fire('sms.send',[$data,$mobile]);
+        $upload = new FileUpload('/uploads/scenery/201602/17/2008122101950696_2.jpg');
+        //event($upload);
         return view('welcome');
     }
 

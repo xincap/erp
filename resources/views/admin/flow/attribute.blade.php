@@ -36,7 +36,7 @@
             @endif
         </ul>
 
-        <form class="form-horizontal" target="hiddeniframe" method="post" id="flow_attribute" name="flow_attribute" action="/admin/flow/save_attribute">
+        <form class="form-horizontal" method="post" id="flow_attribute" name="flow_attribute" action="/admin/flow/save_attribute">
             <input type="hidden" name="flow_id" value="{{$one['flow_id']}}"/>
             <input type="hidden" name="process_id" value="{{$one['id']}}"/>
             <div class="tab-content">
@@ -387,7 +387,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <select id="field_\@a" class="input-medium">
+                                                    <select id="field_#a" class="input-medium">
                                                         <option value="">选择字段</option>
                                                         <!-- 表单字段 start -->
                                                         @foreach($form_one['content_data'] as $vo)
@@ -399,7 +399,7 @@
                                                         @endforeach
                                                         <!-- 表单字段 end -->  
                                                     </select>
-                                                    <select id="condition_\@a" class="input-small">
+                                                    <select id="condition_#a" class="input-small">
                                                         <option value="=">等于</option>
                                                         <option value="&lt;&gt;">不等于</option>
                                                         <option value="&gt;">大于</option>
@@ -409,8 +409,8 @@
                                                         <option value="include">包含</option>
                                                         <option value="exclude">不包含</option>
                                                     </select>
-                                                    <input type="text" id="item_value_\@a" class="input-small">
-                                                    <select id="relation_\@a" class="input-small">
+                                                    <input type="text" id="item_value_#a" class="input-small">
+                                                    <select id="relation_#a" class="input-small">
                                                         <option value="AND">与</option>
                                                         <option value="OR">或者</option>
                                                     </select>
@@ -425,7 +425,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <select id="conList_\@a" multiple="" style="width: 100%;height: 80px;"></select>
+                                                    <select id="conList_#a" multiple="" style="width: 100%;height: 80px;"></select>
                                                 </td>
                                                 <td>
                                                     <div class="btn-group">
@@ -493,8 +493,6 @@
                         </div>
                     </div>
 
-
-
                     <div class="control-group">
                         <label class="control-label" for="process_name"><span class="process-flag badge badge-inverse"><i class="icon-star-empty icon-white" id="style_icon_preview"></i></span> 图标</label>
                         <div class="controls">
@@ -512,7 +510,6 @@
                                     <li class="pink" org-data="icon-home" title="Pink"><i class="icon-home icon-white"></i></li>
                                     <li class="purple" org-data="icon-lock" title="Purple"><i class="icon-lock icon-white"></i></li>
                                 </ul>
-                                <a href="http://v2.bootcss.com/base-css.html#icons" target="_blank">更多</a>
                             </div>
                         </div>
                     </div>

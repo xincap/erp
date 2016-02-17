@@ -148,5 +148,9 @@ class FlowController extends AdminController
         ];
         return view('admin.flow.attribute',$data);
     }
+    
+    public function postSaveAttribute(){
+        
+    }
    
 }

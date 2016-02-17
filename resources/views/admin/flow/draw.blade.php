@@ -325,21 +325,21 @@
                         },
                         "pmForm": function (t) {
                             var activeId = _canvas.getActiveId();//右键当前的ID
-                            var url = "{:U('/Flowdesign/attribute/op/form/id/" + activeId + "')}";
+                            var url = "/admin/flow/attribute?op=form&id=" + activeId + "";
                             ajaxModal(url, function () {
                                 //alert('加载完成执行')
                             });
                         },
                         "pmJudge": function (t) {
                             var activeId = _canvas.getActiveId();//右键当前的ID
-                            var url = "{:U('/Flowdesign/attribute/op/judge/id/" + activeId + "')}";
+                            var url = "/admin/flow/attribute?op=judge&id=" + activeId + "";
                             ajaxModal(url, function () {
                                 //alert('加载完成执行')
                             });
                         },
                         "pmSetting": function (t) {
                             var activeId = _canvas.getActiveId();//右键当前的ID
-                            var url = "{:U('/Flowdesign/attribute/op/style/id/" + activeId + "')}";
+                            var url = "/admin/flow/attribute?op=style&id=" + activeId + "";
                             ajaxModal(url, function () {
                                 //alert('加载完成执行')
                             });
@@ -357,7 +357,7 @@
                     , fnDbClick: function () {
                         //和 pmAttribute 一样
                         var activeId = _canvas.getActiveId();//右键当前的ID
-                        var url = "{:U('/Flowdesign/attribute/id/" + activeId + "')}";
+                        var url = "/admin/flow/attribute?id=" + activeId + "";
                         ajaxModal(url, function () {
                             //alert('加载完成执行')
                         });

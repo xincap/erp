@@ -23,6 +23,9 @@ class EventServiceProvider extends ServiceProvider {
         \Illuminate\Auth\Events\Logout::class => [
             \XinGroup\Listeners\User\Logout::class,
         ],
+        \XinGroup\Events\FileUpload::class  => [
+            \XinGroup\Listeners\SyncToQiniu::class,
+        ]
     ];
 
     /**

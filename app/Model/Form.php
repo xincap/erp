@@ -22,6 +22,10 @@ class Form extends Model {
     }
     
     public function getContentDataAttribute($value){
-        return json_decode($value, true);
+        $value  =  json_decode($value, true);
+        if(!is_array($value)){
+            return \Qiniu\json_decode($value, true);
+        }
+        return $value;
     }
 }
