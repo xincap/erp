@@ -40,7 +40,10 @@
             "XinGroup\\": "app/",
             "Jd\\": "lib/jd/",
             "Taobao\\": "lib/taobao/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]        
     },
     "autoload-dev": {
         "classmap": [

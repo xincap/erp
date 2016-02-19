@@ -8,18 +8,24 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
-use Event;
 use XinGroup\Events\FileUpload;
-use DB;
+use XinGroup\Respository\UserRepository;
 
 class WelcomeController extends Controller {
 
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
     protected $request;
+    
+    /**
+     *
+     * @var UserRepository 
+     */
+    protected $repository;
 
-    public function __construct(Request $request) {
-        $this->request  = $request;
+    public function __construct(Request $request, UserRepository $repository) {
+        $this->request      = $request;
+        $this->repository   = $repository;
         $this->middleware('auth:customer',['except'=>['getIndex']]);
     }
 
@@ -29,7 +35,9 @@ class WelcomeController extends Controller {
 //        Event::fire('sms.send',[$data,$mobile]);
         $upload = new FileUpload('/uploads/scenery/201602/17/2008122101950696_2.jpg');
         //event($upload);
-        DB::table('user');
+        $user   = $this->repository->find(1);
+        dd($user);
+        exit;
         return view('welcome');
     }
 

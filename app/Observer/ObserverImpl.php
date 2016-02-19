@@ -1,8 +1,8 @@
 <?php
 
-namespace Observer\Observer;
+namespace XinGroup\Observer;
 
-use Observer\Observer\ObserverInterface;
+use XinGroup\Observer\ObserverInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class ObserverImpl implements ObserverInterface {

@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Observer\Observer;
+namespace XinGroup\Observer;
 
 use Illuminate\Database\Eloquent\Model;
 

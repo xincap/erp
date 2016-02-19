@@ -14,6 +14,9 @@ class EventServiceProvider extends ServiceProvider {
      * @var array
      */
     protected $listen = [
+        \Illuminate\Database\Events\QueryExecuted::class    => [
+            \XinGroup\Listeners\LogSql::class
+        ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             \SocialiteProviders\Weibo\WeiboExtendSocialite::class,
         ],
