@@ -159,12 +159,13 @@ return [
         XinGroup\Providers\AuthServiceProvider::class,
         XinGroup\Providers\EventServiceProvider::class,
         XinGroup\Providers\RouteServiceProvider::class,
+        XinGroup\Providers\ObserverServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         Stevenyangecho\UEditor\UEditorServiceProvider::class,
-        itbdw\QiniuStorage\QiniuFilesystemServiceProvider::class
+        itbdw\QiniuStorage\QiniuFilesystemServiceProvider::class,
     ],
 
     /*

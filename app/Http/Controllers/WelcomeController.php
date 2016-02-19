@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
 use Event;
 use XinGroup\Events\FileUpload;
+use DB;
 
 class WelcomeController extends Controller {
 
@@ -28,6 +29,7 @@ class WelcomeController extends Controller {
 //        Event::fire('sms.send',[$data,$mobile]);
         $upload = new FileUpload('/uploads/scenery/201602/17/2008122101950696_2.jpg');
         //event($upload);
+        DB::table('user');
         return view('welcome');
     }
 
