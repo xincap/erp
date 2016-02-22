@@ -28,6 +28,7 @@ return array(
 
     'helper_files' => array(
         base_path().'/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
+        app_path() . '/helpers.php',
     ),
 
     /*

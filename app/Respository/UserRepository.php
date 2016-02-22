@@ -9,11 +9,16 @@
 namespace XinGroup\Respository;
 
 use \XinGroup\Model\User;
+use Validator;
 
 class UserRepository extends RepositoryImpl {
     
     function __construct(User $model) {
         $this->model    = $model;
+    }
+    
+    public function register($data){
+        
     }
     
 }

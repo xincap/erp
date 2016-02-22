@@ -34,6 +34,7 @@ class SyncToQiniu implements ShouldQueue
             Log::error('SyncToQiniu file ' .  $fileUpload->getLocalPath() .' not exits');
             return true;
         }
+        
         $disk = Storage::disk('qiniu');
         $content    = file_get_contents($fileUpload->getLocalPath());
         $upload = $disk->put($fileUpload->getFilePath(), $content);
@@ -41,6 +42,6 @@ class SyncToQiniu implements ShouldQueue
             Log::error('SyncToQiniu file ' .  $fileUpload->getFilePath() .' upload error');
             return true;
         }
-        Log::info('SyncToQiniu file ' .  $fileUpload->getRemotePath());
+        
     }
 }

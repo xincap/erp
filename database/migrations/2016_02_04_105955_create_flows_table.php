@@ -21,6 +21,9 @@ class CreateFlowsTable extends Migration
             $table->unsignedBigInteger('sort_order')->comment('排序')->default(0);
             $table->boolean('status')->comment('0不可用1正常')->default(1);
             $table->timestamps();
+            
+            $table->foreign('form_id')->references('id')->on('form')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

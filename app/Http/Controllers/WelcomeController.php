@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
 use XinGroup\Events\FileUpload;
 use XinGroup\Respository\UserRepository;
+use Validator;
 
 class WelcomeController extends Controller {
 
@@ -35,10 +36,30 @@ class WelcomeController extends Controller {
 //        Event::fire('sms.send',[$data,$mobile]);
         $upload = new FileUpload('/uploads/scenery/201602/17/2008122101950696_2.jpg');
         //event($upload);
-        $user   = $this->repository->find(1);
-        dd($user);
-        exit;
+        //$user   = $this->repository->find(1);
+        
         return view('welcome');
+        
+        $url        = 'https://chaoshi.detail.tmall.com/item.htm?id=523050058433';
+        $ch = curl_init();  
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // 跳过证书检查  
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);  // 从证书中检查SSL加密算法是否存在  
+        curl_setopt($ch, CURLOPT_URL, $url);  
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  
+        //curl_setopt($ch, CURLOPT_HTTPHEADER, $header);  
+        //curl_setopt($ch, CURLOPT_POST, true);  
+        //curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));  
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);   
+        //curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);  
+
+        $response = mb_convert_encoding(curl_exec($ch), 'utf-8', 'gbk');  
+        preg_match('~TShop.Setup\((.*?)\);~s', $response, $json);
+        //print_r(json_decode($json[1],true));
+        preg_match_all('~<dt class="tb-metatit">(.+?)</dt>~', $response, $matches);
+        print_r($matches);
+        preg_match_all('~<li data-value="(\d+):(\d+)"><a href="#"><span>(.+?)</span></a></li>~s', $response, $data);
+        print_r($data);
+        exit;
     }
 
 }

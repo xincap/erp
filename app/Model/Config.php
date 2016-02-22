@@ -21,11 +21,11 @@ class Config extends Model
     public $timestamps  = false;
     
     
-    public function getSvalueAttribute(){
-        return $this->svalue;
+    public function getSvalueAttribute($value){
+        return json_decode($value);
     }
     
     public function setSvalueAttribute($value){
-        $this->svalue   = $value;
+        $this->attributes['svalue']   = json_encode($value, JSON_UNESCAPED_UNICODE);
     }
 }
